@@ -24,12 +24,16 @@ exports.Command = class Command extends Base
     git     : "github"
     github  : "github"
     gith    : "github"
+    https   : "generic_web_site"
+    http    : "generic_web_site"
+    web     : "generic_web_site"
 
   #----------
 
   TABLE : 
     twitter : TwitterProofGen
     github : GithubProofGen
+    generic_web_site : GenericWebSiteProofGen
 
   #----------
 
