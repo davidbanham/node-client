@@ -59,15 +59,14 @@ exports.Command = class Command extends Base
     err = null
     unless (ret = @argv.remote_name)?
       await prompt_remote_name @stub.prompter(), defer err, ret
-    @remote_username = ret
+    @remote_name = ret
+    @remote_name_normalized = @stub.normalize_name(ret)
     cb err, ret
 
   #----------
 
   allocate_proof_gen : (cb) ->
-    klass = @TABLE[@service_name]
-    assert.ok klass?
-    await @me.gen_remote_proof_gen { klass, @remote_username }, defer err, @gen
+    await @me.gen_remote_proof_gen { @klass, @remote_name_normalized }, defer err, @gen
     cb err
 
   #----------
@@ -106,7 +105,7 @@ exports.Command = class Command extends Base
 
   check_exists_2 : (cb) ->
     err = null
-    if not(@stub.single_occupancy()) and (@normalized_remote_name in @rp[@service_name])
+    if not(@stub.single_occupancy()) and (@remote_name_normalized in @rp[@service_name])
       prompt = "You already have proved ownership of #{@remote_name}; overwrite? "
       await @check_exists_common prompt, defer err
     cb err
